@@ -1,13 +1,5 @@
 import { prismaClient } from "../../packages/db/prisma";
-
-type TransactionQuery = {
-  eventName?: string;
-  startBlock?: number;
-  endBlock?: number;
-  page?: number;
-  pageSize?: number;
-  chainId?: number;
-};
+import { TransactionQuery } from "../types/TransactionQuery";
 
 /**
  * Get filtered transactions
