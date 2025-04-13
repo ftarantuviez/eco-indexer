@@ -10,8 +10,9 @@ const config: IndexerConfig = {
   contractAddress: BASE_SEPOLIA_USDC_CONTRACT_ADDRESS,
   abi: erc20Abi,
   eventNames: ["Transfer", "Approval"],
-  pollingInterval: 5000,
-  fromBlock: 24377372n,
+  pollingInterval: process.env.POLLING_INTERVAL
+    ? parseInt(process.env.POLLING_INTERVAL)
+    : 5000,
 };
 
 const main = async () => {

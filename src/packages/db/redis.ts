@@ -2,6 +2,7 @@ import { RedisClientType, createClient } from "redis";
 import * as dotenv from "dotenv";
 
 import { logger } from "../../utils/logger";
+import { REDIS_URL } from "../../utils/env";
 
 dotenv.config();
 
@@ -9,8 +10,7 @@ class RedisClient {
   static instance: RedisClient;
   private client: RedisClientType;
   private constructor() {
-    if (process.env.REDIS_URL === undefined)
-      throw new Error("REDIS_URL is not defined");
+    if (REDIS_URL === undefined) throw new Error("REDIS_URL is not defined");
     this.client = createClient({
       url: process.env.REDIS_URL,
     });

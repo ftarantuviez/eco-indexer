@@ -10,7 +10,9 @@ const config: IndexerConfig = {
   contractAddress: OPTIMISM_USDC_CONTRACT_ADDRESS,
   abi: erc20Abi,
   eventNames: ["Transfer", "Approval"],
-  pollingInterval: 5000,
+  pollingInterval: process.env.POLLING_INTERVAL
+    ? parseInt(process.env.POLLING_INTERVAL)
+    : 5000,
 };
 
 const main = async () => {

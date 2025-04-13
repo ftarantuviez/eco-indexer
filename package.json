@@ -7,6 +7,7 @@
     "build": "tsc",
     "start": "node dist/api/server.js",
     "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push",
     "indexer:op-sepolia": "ts-node-dev --respawn --transpile-only src/indexer/chains/op-sepolia/USDC.ts",
     "indexer:sepolia": "ts-node-dev --respawn --transpile-only src/indexer/chains/sepolia/USDC.ts",
     "indexer:arbitrum-sepolia": "ts-node-dev --respawn --transpile-only src/indexer/chains/arbitrum-sepolia/USDC.ts",

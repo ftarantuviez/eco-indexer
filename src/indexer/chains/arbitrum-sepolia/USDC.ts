@@ -1,28 +1,30 @@
 import { erc20Abi } from "viem";
-import { Indexer } from "../../core/indexer";
 import { arbitrumSepolia } from "viem/chains";
+import { IndexerFactory, IndexerConfig } from "../../core/indexer-factory";
+import { logger } from "../../../utils/logger";
 
 const ARBITRUM_SEPOLIA_USDC_CONTRACT_ADDRESS =
-  "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d";
+  "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d" as const;
 
-async function getIndexer() {
-  const indexer = new Indexer(
-    arbitrumSepolia.id,
-    ARBITRUM_SEPOLIA_USDC_CONTRACT_ADDRESS,
-    erc20Abi,
-    ["Transfer", "Approval"]
-  );
-
-  return indexer;
-}
+const config: IndexerConfig = {
+  chainId: arbitrumSepolia.id,
+  contractAddress: ARBITRUM_SEPOLIA_USDC_CONTRACT_ADDRESS,
+  abi: erc20Abi,
+  eventNames: ["Transfer", "Approval"],
+  pollingInterval: process.env.POLLING_INTERVAL
+    ? parseInt(process.env.POLLING_INTERVAL)
+    : 5000,
+};
 
 const main = async () => {
-  const indexer = await getIndexer();
+  const stop = await IndexerFactory.createAndRunIndexer(config);
 
-  while (true) {
-    await indexer.getLogsFromBlockRange();
-    await new Promise((resolve) => setTimeout(resolve, 5000)); // 5 seconds
-  }
+  // Handle graceful shutdown
+  process.on("SIGINT", () => {
+    logger.error("\nGracefully shutting down...");
+    stop();
+    process.exit(0);
+  });
 };
 
 main();
