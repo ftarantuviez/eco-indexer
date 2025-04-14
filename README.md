@@ -4,6 +4,9 @@
 
 A powerful multi-chain event indexer built with TypeScript, supporting multiple EVM-compatible networks. This project allows you to index and query blockchain events across different networks efficiently.
 
+![image](https://github.com/user-attachments/assets/e00d0ca4-80b7-4500-9738-e506aa4da730)
+
+
 ## 🚀 Features
 
 - Multi-chain support (Sepolia, Arbitrum Sepolia, Base Sepolia, Optimism Sepolia, Polygon Amoy)
@@ -14,8 +17,6 @@ A powerful multi-chain event indexer built with TypeScript, supporting multiple 
 - Fallback RPC support with multiple providers
 - Rate limiting for API endpoints
 - TypeScript for type safety
-
-![image](https://github.com/user-attachments/assets/ad215a24-62a9-4249-842f-7cb2b3ec16fc)
 
 
 ## 🛠 Tech Stack
