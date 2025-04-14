@@ -75,3 +75,44 @@ export async function getUniqueChainIds() {
 
   return rawChains.map((c) => c.chainId);
 }
+
+/**
+ * Get transfer transaction statistics, optionally filtered by chain
+ * @param chainId - Optional chain ID to filter by
+ * @returns Statistics about Transfer events and total value
+ */
+export async function getTransferTransactionStats(chainId?: number) {
+  // Base where clause for Transfer events
+  const whereClause = {
+    eventName: "Transfer",
+    ...(chainId ? { chainId } : {}),
+  };
+
+  const transferStats = await prismaClient.transaction.aggregate({
+    where: whereClause,
+    _count: {
+      id: true,
+    },
+  });
+
+  // Get all Transfer transactions to sum their values from decodedTopics
+  const transfers = await prismaClient.transaction.findMany({
+    where: whereClause,
+    select: {
+      decodedTopics: true,
+      chainId: true,
+    },
+  });
+
+  // Sum up the values from decodedTopics, which contains the decoded event arguments
+  const totalValue = transfers.reduce((sum, tx) => {
+    const value = (tx.decodedTopics as any).value || 0n;
+    return sum + BigInt(value.toString());
+  }, 0n);
+
+  return {
+    totalTransfers: transferStats._count.id || 0,
+    totalValue: totalValue.toString(), // Convert BigInt to string for JSON
+    chainId: chainId || "all", // Indicate which chain these stats are for
+  };
+}

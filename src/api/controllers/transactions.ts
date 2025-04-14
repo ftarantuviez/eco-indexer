@@ -146,3 +146,58 @@ export async function getChains(_: Request, res: Response) {
   const chains = await txService.getUniqueChainIds();
   res.json(chains);
 }
+
+/**
+ * @swagger
+ * /transactions/stats:
+ *   get:
+ *     summary: Get transfer transaction statistics
+ *     description: Retrieve aggregate statistics about Transfer events and total value, optionally filtered by chain
+ *     parameters:
+ *       - in: query
+ *         name: chainId
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Optional chain ID to filter statistics by
+ *     responses:
+ *       200:
+ *         description: Transaction statistics
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalTransfers:
+ *                   type: integer
+ *                   description: Total number of Transfer events
+ *                 totalValue:
+ *                   type: string
+ *                   description: Total value of tokens transferred (as BigInt string)
+ *                 chainId:
+ *                   type: string
+ *                   description: Chain ID for the stats, or 'all' if not filtered
+ *       400:
+ *         description: Invalid chain ID
+ *       500:
+ *         description: Internal server error
+ */
+export async function getTransactionStats(req: Request, res: Response) {
+  try {
+    const chainId = req.query.chainId ? Number(req.query.chainId) : undefined;
+
+    // Validate chainId if provided
+    if (chainId !== undefined && (!Number.isInteger(chainId) || chainId <= 0)) {
+      res.status(400).json({
+        error: "Invalid chain ID. Must be a positive integer.",
+      });
+    }
+
+    const stats = await txService.getTransferTransactionStats(chainId);
+    res.json(stats);
+  } catch (error) {
+    res.status(500).json({
+      error: "Internal server error",
+    });
+  }
+}
