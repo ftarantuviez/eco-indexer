@@ -11,7 +11,9 @@ class Logger {
     "silent",
   ];
 
-  static readonly ENV_LEVEL: LogLevel = Logger.getValidLogLevel("debug");
+  static readonly ENV_LEVEL: LogLevel = Logger.getValidLogLevel(
+    (process.env.LOG_LEVEL as LogLevel) || "debug"
+  );
 
   currentLevel: LogLevel;
 
