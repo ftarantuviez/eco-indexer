@@ -1,6 +1,6 @@
 ![Eco Events Banner](https://media.licdn.com/dms/image/v2/D4E3DAQFKgrVfObTQ_w/image-scale_191_1128/B4EZW0D3QqHMAg-/0/1742482668564/ecoproto_cover?e=1745204400&v=beta&t=Bk3hd1PO7tuunNo8k4fotPbf1ps5sxM9IZ-wpS37o0o)
 
-# Eco Events Indexer
+# Multi-Chain Multi-Events Indexer
 
 A powerful multi-chain event indexer built with TypeScript, supporting multiple EVM-compatible networks. This project allows you to index and query blockchain events across different networks efficiently.
 
